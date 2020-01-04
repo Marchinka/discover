@@ -79,7 +79,7 @@ class TeatroParentiScraper:
                 else:
                     is_successful = False
                     log_info("** Not matching event **")
-                    event.print_show()
+                    event.log_event()
                     log_info("Dates", show_text_date)
 
             except Exception as e:

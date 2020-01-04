@@ -32,8 +32,8 @@ class Event:
             "description": self.description,
             "link": self.link}
 
-    def print_show(self):
-        print(self.get_dict())
+    def log_event(self):
+        log_info(self.get_dict())
 
 
 class ScrapingEngine:
