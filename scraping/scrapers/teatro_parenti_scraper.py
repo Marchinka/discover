@@ -3,7 +3,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from scraping.scraping_engine import Show
+from scraping.scraping_engine import Event
+from scraping.utils.log import log_info
 
 
 def __get_month_number__(text_month):
@@ -51,12 +52,13 @@ class TeatroParentiScraper:
         return "Teatro Parenti"
 
     def run(self):
+        is_successful = True
         url = 'https://www.teatrofrancoparenti.it/app/wp-admin/admin-ajax.php?action=api&v=snippet&api=cartellone-program&taxonomies=2&e_taxonomies=17'
         page = requests.get(url)
         soup = BeautifulSoup(page.content, 'html.parser')
         grid_modules = soup.find_all("div", class_='def-grid-module')
 
-        shows = []
+        events = []
         for gridModule in grid_modules:
             try:
                 show_text_date = gridModule.find('div', class_="cta-2").text.strip()
@@ -64,7 +66,7 @@ class TeatroParentiScraper:
                 show_title = gridModule.find('h4').text.strip()
                 show_description = gridModule.find('div', class_="content-styled").text.strip()
                 show_link = gridModule.find('h4').find("a")['href'].strip()
-                show = Show(
+                event = Event(
                     title=show_title,
                     start_date=dates["start_date"],
                     end_date=dates["end_date"],
@@ -73,13 +75,15 @@ class TeatroParentiScraper:
                     link=show_link)
 
                 if dates["are_matching"]:
-                    shows.append(show)
+                    events.append(event)
                 else:
-                    print("** Not matching show **")
-                    show.print_show()
-                    print("Dates", show_text_date)
+                    is_successful = False
+                    log_info("** Not matching event **")
+                    event.print_show()
+                    log_info("Dates", show_text_date)
 
             except Exception as e:
-                print(e)
+                is_successful = False
+                log_info(e)
 
-        return shows
+        return {"events": events, "is_successful": is_successful, "engine": self.name()}

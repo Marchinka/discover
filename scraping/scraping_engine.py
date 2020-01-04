@@ -2,6 +2,8 @@ import pymongo
 from pymongo import ReplaceOne
 from pymongo.errors import BulkWriteError
 
+from scraping.utils.log import log_info
+
 mongo_client = pymongo.MongoClient(
     "ds259738.mlab.com:59738",
     username='discover_adm',
@@ -11,7 +13,8 @@ mongo_client = pymongo.MongoClient(
 mongo_db = mongo_client["heroku_rxd08jx3"]
 events_collection = mongo_db["events"]
 
-class Show:
+
+class Event:
     def __init__(self, title, start_date, end_date, location, description="", link=""):
         self.title = title
         self.location = location
@@ -37,25 +40,52 @@ class ScrapingEngine:
     def __init__(self, engines):
         self.engines = engines
 
-    def run(self):
-        all_shows = []
+    def get_sources(self):
+        engine_names = []
         for engine in self.engines:
-            print("Starting", engine.name())
-            shows = engine.run()
-            print("Found", len(shows), "shows")
-            all_shows = all_shows + shows
+            engine_names.append(engine.name())
+        return engine_names
 
-        dtos = []
+    def run(self, source="All"):
+        all_result = []
+        all_events = []
+        is_successful = True
+        for engine in self.engines:
+            if source == "All" or source == engine.name():
+                result = self.__run_engine__(engine)
+                is_successful = is_successful and result["is_successful"]
+                events = result["events"]
+                all_events = all_events + events
+                all_result.append({
+                    "events_count": len(events),
+                    "is_successful": result["is_successful"],
+                    "engine": result["engine"]})
+
         bulk_op = events_collection.initialize_ordered_bulk_op()
 
-        for show in all_shows:
+        for show in all_events:
             dto = show.get_dict()
-            dtos.append(dto)
-            bulk_op.find({'title': dto["title"]}).upsert().update({'$set': dto})
+            bulk_op.find({'title': dto["title"], 'location': dto["location"]}).upsert().update({'$set': dto})
 
         try:
             bulk_op.execute()
         except BulkWriteError as bwe:
-            print(bwe.details)
+            log_info(bwe.details)
 
+        return all_result
 
+    def __run_engine__(self, engine):
+        try:
+            log_info("Starting", engine.name())
+            result = engine.run()
+
+            if not result["is_successful"]:
+                log_info("Engine", engine.name(), "is not successful")
+
+            log_info("Found", len(result["events"]), "shows")
+            return result
+
+        except Exception as e:
+            log_info("Engine", engine.name(), "has encountered a fatal error")
+            log_info(e)
+            return {"events": [], "is_successful": False, "engine": engine.name()}

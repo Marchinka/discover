@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 from scraping import scraping_factory
 
@@ -10,10 +10,17 @@ def hello():
     return "Hello World!"
 
 
-@app.route("/run_scraping")
+@app.route('/sources', methods=['GET'])
 def run_engine():
-    scraping_factory.get_engine().run()
-    return "Done"
+    result = scraping_factory.get_engine().get_sources()
+    return jsonify(result)
+
+
+@app.route('/run_scraping', defaults={'engine_id': "All"}, methods=['GET'])
+@app.route('/run_scraping/<string:engine_id>', methods=['GET'])
+def run_engine(engine_id):
+    result = scraping_factory.get_engine().run(engine_id)
+    return jsonify(result)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from scraping.scraping_engine import Show
+from scraping.scraping_engine import Event
+from scraping.utils.log import log_info
 
 
 def __get_month_number__(text_month):
@@ -41,12 +42,13 @@ class Binario7Scraper:
         return "Teatro Binario 7"
 
     def run(self):
+        is_successful = True
         url = 'https://teatro.binario7.org/'
         page = requests.get(url)
         soup = BeautifulSoup(page.content, 'html.parser')
         event_list_items = soup.find_all("div", class_='event-list-item')
 
-        shows = []
+        events = []
         for event_list_item in event_list_items:
             try:
                 show_title = event_list_item.find('a', class_="name").text.strip()
@@ -61,7 +63,7 @@ class Binario7Scraper:
                 start_date = __get_date__(start_date_text)
                 end_date = __get_date__(end_date_text)
 
-                show = Show(
+                event = Event(
                     title=show_title,
                     start_date=start_date,
                     end_date=end_date,
@@ -69,9 +71,10 @@ class Binario7Scraper:
                     description=show_description,
                     link=show_link)
 
-                shows.append(show)
+                events.append(event)
 
             except Exception as e:
-                print(e)
+                is_successful = False
+                log_info(e)
 
-        return shows
+        return {"events": events, "is_successful": is_successful, "engine": self.name()}
