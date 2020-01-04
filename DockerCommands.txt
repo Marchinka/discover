@@ -1,0 +1,2 @@
+docker build -t discover:latest .
+docker run -d -p 5000:5000 discover
