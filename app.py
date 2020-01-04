@@ -1,13 +1,28 @@
-from flask import Flask, jsonify
+import os
+from flask import Flask, jsonify, request, url_for
+from werkzeug.utils import redirect
 
 from scraping import scraping_factory
+from scraping.repository import events_repository
 
 app = Flask(__name__)
 
 
-@app.route("/")
-def hello():
-    return "Hello World!"
+script_dir = os.path.dirname(__file__)  # absolute dir the script is in
+
+
+@app.route('/')
+def home():
+    return redirect(url_for('static', filename='index.html'))
+
+
+
+@app.route('/events', methods=['GET'])
+def get_events():
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    events = events_repository.get_events(start_date, end_date)
+    return jsonify(events)
 
 
 @app.route('/sources', methods=['GET'])

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "ES2015",
+      "jsx": "react",
+      "module": "umd",
+      "moduleResolution": "node",
+      "experimentalDecorators": true,
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "outDir": "wwwroot/Static/js/",
+      "sourceMap": true,
+      "rootDir": "./"
+    }
+  }
