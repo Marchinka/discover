@@ -11,7 +11,7 @@ def hello():
 
 
 @app.route('/sources', methods=['GET'])
-def run_engine():
+def get_source():
     result = scraping_factory.get_engine().get_sources()
     return jsonify(result)
 

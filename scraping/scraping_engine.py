@@ -1,17 +1,5 @@
-import pymongo
-from pymongo import ReplaceOne
-from pymongo.errors import BulkWriteError
-
+from scraping.repository import events_repository
 from scraping.utils.log import log_info
-
-mongo_client = pymongo.MongoClient(
-    "ds259738.mlab.com:59738",
-    username='discover_adm',
-    password='Magheggio.89',
-    authSource='heroku_rxd08jx3',
-    retryWrites=False)
-mongo_db = mongo_client["heroku_rxd08jx3"]
-events_collection = mongo_db["events"]
 
 
 class Event:
@@ -61,16 +49,7 @@ class ScrapingEngine:
                     "is_successful": result["is_successful"],
                     "engine": result["engine"]})
 
-        bulk_op = events_collection.initialize_ordered_bulk_op()
-
-        for show in all_events:
-            dto = show.get_dict()
-            bulk_op.find({'title': dto["title"], 'location': dto["location"]}).upsert().update({'$set': dto})
-
-        try:
-            bulk_op.execute()
-        except BulkWriteError as bwe:
-            log_info(bwe.details)
+        events_repository.save_events(all_events)
 
         return all_result
 
