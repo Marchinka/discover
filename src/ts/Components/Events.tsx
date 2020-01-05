@@ -126,7 +126,7 @@ export class Events extends React.Component<Props, State> {
             </a>
               <span className="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onClick={() => this.openMenu()}><i className="fa fa-bars"></i></span>
               <div className="w3-container">
-              <h1><b className="title">Instage</b> <b className="sub-title">Events</b></h1>
+              <h1><b className="title">Instage Events</b></h1>
               <div className="w3-section w3-bottombar w3-padding-16">
                 <span className="w3-margin-right">Filter:</span> 
                 <input 
