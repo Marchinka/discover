@@ -4,6 +4,7 @@ import * as moment from "moment";
 import { Dao } from "../Utils/Dao";
 
 declare var $: any;
+declare var window: any;
 
 interface State {
     events: AppEvent[];
@@ -110,13 +111,21 @@ export class Events extends React.Component<Props, State> {
         }
     }
 
+    openMenu(): void {
+        window.w3_open();
+    }
+
     render() {
         return (<div>
             <header id="portfolio">
-              <a href="#"><img src="/w3images/avatar_g2.jpg" style={{width: "65px"}} className="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity" /></a>
-              <span className="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey"><i className="fa fa-bars"></i></span>
+              <a href="#">
+                  <img  src="/static/img/big-icon.png" 
+                        style={{width:"65px"}}
+                        className="w3-right w3-margin w3-hide-large w3-hover-opacity" />
+            </a>
+              <span className="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onClick={() => this.openMenu()}><i className="fa fa-bars"></i></span>
               <div className="w3-container">
-              <h1><b>My Events</b></h1>
+              <h1 className="title"><b>My Events</b></h1>
               <div className="w3-section w3-bottombar w3-padding-16">
                 <span className="w3-margin-right">Filter:</span> 
                 <input 
@@ -131,10 +140,13 @@ export class Events extends React.Component<Props, State> {
                 <div className="w3-row-padding">
                     {(this.state.events || []).map((event) => {
                         return (<a className="w3-third w3-container w3-margin-bottom event-link" href={event.link} key={event._id} target="_blank">
-                                    <div className="w3-container w3-white event-card">
-                                        <p><b>{event.title}</b></p>
-                                        <div>
-                                        <span><b>{event.location}</b>&nbsp;{this.getTimeSpan(event)}</span>
+                                    <div className="w3-container event-card">
+                                        <p className="title"><b>{event.title}</b></p>
+                                        <div className="fs-12px sub-title">
+                                            <span><b>{event.location}</b>&nbsp;</span>
+                                        </div>
+                                        <div className="fs-12px">
+                                            <span><b>{this.getTimeSpan(event)}</b>&nbsp;</span>
                                         </div>
                                         <div className="description-container">
                                             {event.description && <p className="description">{event.description}</p>}

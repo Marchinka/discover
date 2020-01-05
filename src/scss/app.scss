@@ -1,9 +1,42 @@
+$background-color: #dddddd;
+$font-color: black;
+$over-element-background-color: #f3f3f3;
+$title-color:rgb(255, 81, 0);
+$sub-title-color:rgb(255, 187, 0);
+
+// $background-color: #3a3a3a;
+// $font-color: white;
+// $over-element-background-color: #242424;
+// $title-color:white;
+// $sub-title-color:white;
+
+body {
+    background-color: $background-color;
+    color: $font-color;
+}
+
+.title {
+    font-weight: bold;
+    color: $title-color;
+}
+
+.sub-title {
+    font-weight: bold;
+    color: $sub-title-color;
+}
+
 .w-100 {
     width: 100%;
 }
 
+.w3-sidebar {
+    background-color: $over-element-background-color;
+    color: $font-color;
+}
+
 .event-card {
     height: 180px;
+    background-color: $over-element-background-color;
 
     &:hover {
         -webkit-box-shadow: 0px 0px 24px 4px rgba(161,161,161,1);
@@ -23,9 +56,9 @@
 
 .filler {
     text-align: center;
-    font-size: 50px;
+    font-size: 45px;
     margin-top: 15px;
-    color: gainsboro;
+    color: #c3c3c3;
 
     .filler-icon {
 
@@ -33,7 +66,8 @@
 }
 
 .event-link {
-    color: inherit;
+    color: $over-element-background-color;
+    color: $font-color;
     text-decoration: inherit; 
     display: block;
 }
@@ -41,7 +75,37 @@
 .dateFilter {
     width: 250px;
     /* text-align: center; */
-    background: white;
+    background: $over-element-background-color;
     border: none;
     padding: 5px 15px 5px 15px;
+}
+
+.fs-12px {
+    font-size: 12px;
+}
+
+.green {
+    color: #46d47f;
+}
+
+.yellow {
+    color: #f58700;
+}
+
+.red {
+    color: #f44336;
+}
+
+$icon-width: 25px;
+.log-details {
+    margin-left: $icon-width;
+    font-size: 10px;
+}
+
+.log-icon {
+  width: $icon-width;  
+}
+
+.side-icon {
+
 }

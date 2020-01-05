@@ -1,5 +1,7 @@
 import datetime
 
+import pymongo
+
 from scraping.repository import app_mongo_db
 
 
@@ -24,3 +26,12 @@ def log_run(engine_name, result):
         "events_count": len(result["events"])
     }
     app_mongo_db.scraping_log_collection.update({"engine": engine_name}, dto, True)
+
+
+def get_logs():
+    cursor = app_mongo_db.scraping_log_collection.find().sort([("last_run", pymongo.ASCENDING), ("engine", pymongo.ASCENDING)])
+    elements = list(cursor)
+    for element in elements:
+        element["last_run"] = datetime.datetime.timestamp(element["last_run"])
+        element["_id"] = str(element["_id"])
+    return elements
