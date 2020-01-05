@@ -11,6 +11,7 @@ interface State {
     events: AppEvent[];
     start_date: number;
     end_date: number;
+    loading: boolean;
 }
 
 interface Props {
@@ -32,7 +33,7 @@ export class Events extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = { events: [], start_date: null, end_date: null };
+        this.state = { events: [], start_date: null, end_date: null, loading: true };
         this.dao = new Dao("/");
     }
 
@@ -44,7 +45,8 @@ export class Events extends React.Component<Props, State> {
 
         self.setState({
             start_date: startDate.unix(),
-            end_date: endDate.unix()
+            end_date: endDate.unix(),
+            loading: true
         }, () => {
             this.getEvents();
         });
@@ -65,6 +67,7 @@ export class Events extends React.Component<Props, State> {
 			}
 		}, function (start: any, end: any, label: any) {
 			self.setState({
+                loading: true,
                 start_date: start.unix(),
                 end_date: end.unix()
 			}, () => {
@@ -93,6 +96,7 @@ export class Events extends React.Component<Props, State> {
                 method: "GET"
             }, (response) => {
                 self.setState({
+                    loading: false,
                     events: response.data
                 });
             });
@@ -119,7 +123,7 @@ export class Events extends React.Component<Props, State> {
     render() {
         return (<div>
             <header id="portfolio">
-              <a href="" onClick={() => location.reload()}>
+              <a href="" onClick={() => location.reload(true)}>
                   <img  src="/img/big-icon.png" 
                         style={{width:"65px"}}
                         className="w3-right w3-margin w3-hide-large w3-hover-opacity" />
@@ -139,6 +143,9 @@ export class Events extends React.Component<Props, State> {
               </header>
               
                 <div className="w3-row-padding">
+                    {this.state.loading && <div className="loader">
+                        <i className="title fas fa-hourglass-half fa-spin fa-5x"></i>
+                    </div>}
                     {(this.state.events || []).map((event) => {
                         return (<a className="w3-third w3-container w3-margin-bottom event-link" href={event.link} key={event._id} target="_blank">
                                     <div className="w3-container event-card">
