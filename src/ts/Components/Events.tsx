@@ -5,6 +5,7 @@ import { Dao } from "../Utils/Dao";
 
 declare var $: any;
 declare var window: any;
+declare var location: any;
 
 interface State {
     events: AppEvent[];
@@ -118,8 +119,8 @@ export class Events extends React.Component<Props, State> {
     render() {
         return (<div>
             <header id="portfolio">
-              <a href="#">
-                  <img  src="/static/img/big-icon.png" 
+              <a href="" onClick={() => location.reload()}>
+                  <img  src="/img/big-icon.png" 
                         style={{width:"65px"}}
                         className="w3-right w3-margin w3-hide-large w3-hover-opacity" />
             </a>

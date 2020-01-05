@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request, url_for
+from flask import Flask, jsonify, request, url_for, send_from_directory
 from werkzeug.utils import redirect
 
 from scraping import scraping_factory
@@ -11,8 +11,13 @@ script_dir = os.path.dirname(__file__)  # absolute dir the script is in
 
 
 @app.route('/')
-def home():
-    return redirect(url_for('static', filename='index.html'))
+def send_index():
+    return app.send_static_file('index.html')
+
+
+@app.route('/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
 
 
 @app.route('/events', methods=['GET'])

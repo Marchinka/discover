@@ -1,0 +1,1 @@
+Manifest file generator: https://app-manifest.firebaseapp.com/
