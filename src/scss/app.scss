@@ -40,9 +40,17 @@ body {
     color: $font-color;
 }
 
+.ellipsis {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
 .event-card {
     height: 180px;
     background-color: $over-element-background-color;
+    overflow-y: hidden;
 
     &:hover {
         -webkit-box-shadow: 0px 0px 24px 4px rgba(161,161,161,1);
@@ -52,7 +60,7 @@ body {
 
     .description-container {
         overflow-y: hidden;
-        height: 100px;
+        height: 70px;
 
         .description {
             font-size: 9px;
@@ -76,6 +84,10 @@ body {
     color: $font-color;
     text-decoration: inherit; 
     display: block;
+}
+
+.height-18px {
+    height: 18px;
 }
 
 .dateFilter {

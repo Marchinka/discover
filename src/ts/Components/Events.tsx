@@ -149,11 +149,11 @@ export class Events extends React.Component<Props, State> {
                     {(this.state.events || []).map((event) => {
                         return (<a className="w3-third w3-container w3-margin-bottom event-link" href={event.link} key={event._id} target="_blank">
                                     <div className="w3-container event-card">
-                                        <p className="title"><b>{event.title}</b></p>
-                                        <div className="fs-12px sub-title">
+                                        <p className="title height-18px ellipsis"><b>{event.title}</b></p>
+                                        <div className="fs-12px sub-title height-18px">
                                             <span><b>{event.location}</b>&nbsp;</span>
                                         </div>
-                                        <div className="fs-12px">
+                                        <div className="fs-12px height-18px">
                                             <span><b>{this.getTimeSpan(event)}</b>&nbsp;</span>
                                         </div>
                                         <div className="description-container">
