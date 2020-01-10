@@ -22,7 +22,7 @@ def __get_month_number__(text_month):
         "novembre": 11,
         "dicembre": 12,
     }
-    return switcher.get(text_month.lower(), 1)
+    return switcher.get(text_month.lower(), -1)
 
 
 def __get_dates__(text_date):
@@ -40,6 +40,11 @@ def __get_dates__(text_date):
     start_day = int(match.group(2) or end_day)
     start_month_text = match.group(3) or end_month_text
     start_month = __get_month_number__(start_month_text)
+
+    # for example this happens for '19 - 20 settembre 2019' where the match for the start month is '-'
+    if start_month == -1:
+        start_month = end_month
+        
     year = int(match.group(8))
     return {"start_date": datetime.datetime(year, start_month, start_day),
             "end_date": datetime.datetime(year, end_month, end_day),
@@ -75,6 +80,7 @@ class ElfoPucciniScraper:
                     start_date=dates["start_date"],
                     end_date=dates["end_date"],
                     location="Teatro Elfo Puccini",
+                    type="Theater",
                     description=show_description,
                     link=show_link)
 

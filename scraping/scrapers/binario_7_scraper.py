@@ -68,6 +68,7 @@ class Binario7Scraper:
                     start_date=start_date,
                     end_date=end_date,
                     location="Teatro Binario 7",
+                    type="Theater",
                     description=show_description,
                     link=show_link)
 

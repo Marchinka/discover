@@ -80,6 +80,7 @@ class PiccoloTeatroScraper:
                     start_date=start_date,
                     end_date=end_date,
                     location=location,
+                    type="Theater",
                     description=show_description,
                     link=show_link)
 

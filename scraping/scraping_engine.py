@@ -3,9 +3,10 @@ from scraping.utils.log import log_info
 
 
 class Event:
-    def __init__(self, title, start_date, end_date, location, description="", link=""):
+    def __init__(self, title, start_date, end_date, location, type, description="", link=""):
         self.title = title
         self.location = location
+        self.type = type
         self.start_date = start_date
         self.end_date = end_date
         self.description = description
@@ -15,6 +16,7 @@ class Event:
         return {
             "title": self.title,
             "location": self.location,
+            "type": self.type,
             "start_date": self.start_date,
             "end_date": self.end_date,
             "description": self.description,

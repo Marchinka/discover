@@ -24,6 +24,7 @@ interface AppEvent {
     location: string;
     link: string;
     description: string;
+    type: string;
     start_date: string;
     end_date: string;
 }
@@ -120,6 +121,15 @@ export class Events extends React.Component<Props, State> {
         window.w3_open();
     }
 
+
+    private getIcon(event: AppEvent) {
+        if (event.type == "Theater") {
+            return <i className="fas fa-theater-masks filler-icon"></i>;
+        } else {
+            null;
+        }
+    }
+
     render() {
         return (<div>
             <header id="portfolio">
@@ -160,7 +170,7 @@ export class Events extends React.Component<Props, State> {
                                             {event.description && <p className="description">{event.description}</p>}
 
                                             {!event.description && <div className="filler">
-                                                <i className="fas fa-theater-masks filler-icon"></i>
+                                                {this.getIcon(event)}
                                             </div>}
                                         </div>
                                     </div>

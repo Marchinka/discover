@@ -22,7 +22,7 @@ def __get_month_number__(text_month):
         "novembre": 11,
         "dicembre": 12,
     }
-    return switcher.get(text_month.lower(), 1)
+    return switcher.get(text_month.lower(), -1)
 
 
 def __get_dates__(text_date):
@@ -40,48 +40,58 @@ def __get_dates__(text_date):
     start_day = int(match.group(2) or end_day)
     start_month_text = match.group(3) or end_month_text
     start_month = __get_month_number__(start_month_text)
+
+    # for example this happens for '19 - 20 settembre 2019' where the match for the start month is '-'
+    if start_month == -1:
+        start_month = end_month
+        
     year = int(match.group(8))
     return {"start_date": datetime.datetime(year, start_month, start_day),
             "end_date": datetime.datetime(year, end_month, end_day),
             "are_matching": True}
 
 
-class TeatroParentiScraper:
+class AnteoScraper:
 
     def name(self):
-        return "Teatro Parenti"
+        return "Anteo"
 
     def run(self):
         is_successful = True
-        url = 'https://www.teatrofrancoparenti.it/app/wp-admin/admin-ajax.php?action=api&v=snippet&api=cartellone-program&taxonomies=2&e_taxonomies=17'
+        url = 'https://anteo.spaziocinema.18tickets.it/'
         page = requests.get(url)
         soup = BeautifulSoup(page.content, 'html.parser')
-        grid_modules = soup.find_all("div", class_='def-grid-module')
+        dayRow = soup.find_all("div", class_='m18-films-day-row')
 
         events = []
-        for gridModule in grid_modules:
+        for dayRow in dayRow:
+            show_text_date = dayRow.find('h3', class_="text-center").text.strip()
             try:
-                show_text_date = gridModule.find('div', class_="cta-2").text.strip()
-                dates = __get_dates__(show_text_date)
-                show_title = gridModule.find('h4').text.strip()
-                show_description = gridModule.find('div', class_="content-styled").text.strip()
-                show_link = gridModule.find('h4').find("a")['href'].strip()
-                event = Event(
-                    title=show_title,
-                    start_date=dates["start_date"],
-                    end_date=dates["end_date"],
-                    location="Teatro Franco Parenti",
-                    type="Theater",
-                    description=show_description,
-                    link=show_link)
-
-                if dates["are_matching"]:
-                    events.append(event)
-                else:
-                    is_successful = False
-                    log_info("** Not matching event **")
-                    event.log_event()
-                    log_info("Dates", show_text_date)
+                pass
+                # show_text_date = dayRow.find('div', class_="date").text.strip()
+                # dates = __get_dates__(show_text_date)
+                # show_title = dayRow.find('div', class_="titolo").text.strip()
+                # show_description = ""
+                # show_link = dayRow.find('div', class_="titolo").find("a")['href'].strip()
+                #
+                # if show_link.startswith("/"):
+                #     show_link = "https://www.elfo.org" + show_link
+                #
+                # event = Event(
+                #     title=show_title,
+                #     start_date=dates["start_date"],
+                #     end_date=dates["end_date"],
+                #     location="Teatro Elfo Puccini",
+                #     description=show_description,
+                #     link=show_link)
+                #
+                # if dates["are_matching"]:
+                #     events.append(event)
+                # else:
+                #     is_successful = False
+                #     log_info("** Not matching event **")
+                #     event.log_event()
+                #     log_info("Dates", show_text_date)
 
             except Exception as e:
                 is_successful = False
