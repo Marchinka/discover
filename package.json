@@ -36,7 +36,7 @@
     "react-dom": "^16.8.3",
     "tsify": "^4.0.1",
     "typescript": "^3.3.3333",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   },
   "dependencies": {
     "express": "^4.17.1",
