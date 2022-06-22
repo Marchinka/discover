@@ -15,7 +15,7 @@ jsonschema==3.1.1
 lasio==0.24.1
 MarkupSafe==1.1.1
 more-itertools==7.2.0
-numpy==1.17.4
+numpy==1.22.0
 pymongo==3.9.0
 pyrsistent==0.15.5
 python-dateutil==2.8.0
